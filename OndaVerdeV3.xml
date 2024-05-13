@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+
+const int N = 4;         // # trains
+typedef int[1,N] id_t;
+
+int cont_via = 1;
+
+clock tempo;
+
+int passar[N];
+
+chan abrir[N+1];
+
+const int t_verde = 15;
+const int t_vermelho = 20;
+const int t_amarelo = 5;
+</declaration>
+	<template>
+		<name x="5" y="5">Semaforo</name>
+		<parameter>int id, const int tmp</parameter>
+		<declaration>// Place local declarations here.
+bool flagAmarelo = false;
+int tempo_semaforo;</declaration>
+		<location id="id0" x="-391" y="-51">
+			<name x="-467" y="-59">Vermelho</name>
+		</location>
+		<location id="id1" x="93" y="-51">
+			<name x="76" y="-42">Verde</name>
+		</location>
+		<location id="id2" x="102" y="221">
+			<name x="83" y="238">Amarelo</name>
+		</location>
+		<init ref="id0"/>
+		<transition id="id3">
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="212" y="68">id == 4 &amp;&amp; tempo &gt;= t_verde</label>
+			<label kind="assignment" x="187" y="93">tempo_semaforo = tempo_semaforo + t_verde</label>
+			<nail x="178" y="85"/>
+		</transition>
+		<transition id="id4">
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-306" y="144">tempo &gt;= tempo_semaforo + t_amarelo</label>
+			<label kind="assignment" x="-314" y="170">flagAmarelo = false,
+tempo_semaforo = tempo_semaforo + t_amarelo</label>
+			<nail x="-391" y="221"/>
+		</transition>
+		<transition id="id5">
+			<source ref="id1"/>
+			<target ref="id1"/>
+			<label kind="guard" x="153" y="-93">tempo &gt;= (tempo_semaforo + tmp) &amp;&amp; id &lt; 4 &amp;&amp; !flagAmarelo</label>
+			<label kind="synchronisation" x="306" y="-119">abrir[id] !</label>
+			<label kind="assignment" x="272" y="-59">flagAmarelo = true,
+tempo_semaforo = tempo_semaforo + tmp</label>
+			<nail x="255" y="-59"/>
+			<nail x="255" y="-17"/>
+		</transition>
+		<transition id="id6">
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-263" y="-297">tempo &gt;= t_vermelho &amp;&amp; id != 1</label>
+			<label kind="synchronisation" x="-204" y="-323">abrir[id-1]?</label>
+			<label kind="assignment" x="-238" y="-272">passar[id-1] = 1,
+tempo_semaforo = t_vermelho</label>
+			<nail x="-391" y="-229"/>
+			<nail x="93" y="-229"/>
+		</transition>
+		<transition id="id7">
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-289" y="34">tempo &gt;= (tempo_semaforo - tmp) &amp;&amp; flagAmarelo</label>
+			<label kind="assignment" x="-306" y="68">tempo_semaforo = tempo_semaforo + (t_verde - tmp)</label>
+		</transition>
+		<transition id="id8">
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-263" y="-119">tempo &gt;= t_vermelho &amp;&amp; id == 1</label>
+			<label kind="assignment" x="-255" y="-93">passar[id-1] = 1,
+tempo_semaforo = t_vermelho</label>
+		</transition>
+	</template>
+	<template>
+		<name>Via</name>
+		<parameter>int id, const int tmp</parameter>
+		<declaration>int cont_carros = 0;
+clock tempo_via;</declaration>
+		<location id="id9" x="-739" y="-221">
+			<name x="-833" y="-229">SemCarro</name>
+		</location>
+		<location id="id10" x="-535" y="-221">
+			<name x="-586" y="-204">CarroChegando</name>
+		</location>
+		<location id="id11" x="-229" y="-221">
+			<name x="-212" y="-229">CarroMovimento</name>
+		</location>
+		<location id="id12" x="110" y="-85">
+			<name x="119" y="-119">CarroSaindo</name>
+		</location>
+		<location id="id13" x="-229" y="-85">
+			<name x="-365" y="-93">CarroNoSemaforo</name>
+		</location>
+		<location id="id14" x="110" y="-229">
+			<name x="68" y="-263">ProximaVia</name>
+		</location>
+		<init ref="id9"/>
+		<transition id="id15">
+			<source ref="id12"/>
+			<target ref="id14"/>
+			<label kind="guard" x="119" y="-187">id &lt; 4</label>
+			<label kind="assignment" x="119" y="-170">cont_via = cont_via + 1</label>
+		</transition>
+		<transition id="id16">
+			<source ref="id13"/>
+			<target ref="id13"/>
+			<label kind="guard" x="-297" y="-17">passar[id-1] == 0</label>
+			<nail x="-246" y="-25"/>
+			<nail x="-204" y="-25"/>
+		</transition>
+		<transition id="id17">
+			<source ref="id13"/>
+			<target ref="id12"/>
+			<label kind="guard" x="-119" y="-136">passar[id-1] == 1</label>
+			<label kind="assignment" x="-161" y="-110">cont_carros = cont_carros - 1</label>
+		</transition>
+		<transition id="id18">
+			<source ref="id11"/>
+			<target ref="id13"/>
+			<label kind="guard" x="-365" y="-161">tempo_via &gt;= tmp</label>
+		</transition>
+		<transition id="id19">
+			<source ref="id12"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-459" y="59">cont_carros == 0 &amp;&amp; id != cont_via</label>
+			<nail x="110" y="51"/>
+			<nail x="-739" y="51"/>
+		</transition>
+		<transition id="id20">
+			<source ref="id12"/>
+			<target ref="id12"/>
+			<label kind="guard" x="170" y="-93">id == 4 &amp;&amp; cont_carros != 0</label>
+			<nail x="161" y="-93"/>
+			<nail x="161" y="-68"/>
+		</transition>
+		<transition id="id21">
+			<source ref="id10"/>
+			<target ref="id11"/>
+			<label kind="assignment" x="-501" y="-246">cont_carros = cont_carros + 1</label>
+		</transition>
+		<transition id="id22">
+			<source ref="id9"/>
+			<target ref="id10"/>
+			<label kind="guard" x="-688" y="-246">cont_via == id</label>
+		</transition>
+	</template>
+	<system>const int tempo_via_1 = 0;
+const int tempo_via_2 = 12;
+const int tempo_via_3 = 15;
+const int tempo_via_4 = 16;
+
+const int tempo_semaforo_1 = 9;
+const int tempo_semaforo_2 = 17;
+const int tempo_semaforo_3 = 13;
+const int tempo_semaforo_4 = 0;
+
+Semaforo1 = Semaforo(1, tempo_semaforo_1);
+Semaforo2 = Semaforo(2, tempo_semaforo_2);
+Semaforo3 = Semaforo(3, tempo_semaforo_3);
+Semaforo4 = Semaforo(4, tempo_semaforo_4);
+
+Via1 = Via(1, tempo_via_1);
+Via2 = Via(2, tempo_via_2);
+Via3 = Via(3, tempo_via_3);
+Via4 = Via(4, tempo_via_4);
+
+
+system Semaforo1, Semaforo2, Semaforo3, Semaforo4, Via1, Via2, Via3, Via4;
+</system>
+	<queries>
+		<query>
+			<formula>A[] not deadlock</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-05-09 21:24:56 -0300">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Via1.cont_carros &gt; 0</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-05-09 21:29:38 -0300">
+			</result>
+		</query>
+		<query>
+			<formula>A[] not (Via1.cont_carros &gt; 1)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-05-09 21:29:44 -0300">
+			</result>
+		</query>
+		<query>
+			<formula>A[] (Via1.cont_carros == 0 || Via1.cont_carros == 1)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-05-09 21:22:02 -0300">
+			</result>
+		</query>
+	</queries>
+</nta>
