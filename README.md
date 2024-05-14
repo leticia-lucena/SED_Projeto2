@@ -8,7 +8,7 @@ Projeto 2 - Sistemas a Eventos Discretos
 # Sobre o projeto
 Este projeto tem como objetivo modelar um sistema de semáforos que permita um comportamento de onda verde para os semáforos, ou seja, que o motorista chegue ao seu destino encontrando, no máximo, um sinal vermelho.
 A modelagem foi realizada na ferramenta UPPALL, um ambiente integrado para modelagem, validação e verificação de sistemas em tempo real modelados como redes de autômatos temporizados.
-Além da modelagem, foi realizada a simulação e a validaçã, utilizando lógica temporal.
+Além da modelagem, foi realizada a simulação e a validação, utilizando lógica temporal.
 
 ## Regras do sistema
 
@@ -40,4 +40,5 @@ Representa o comportamento da via, com os seguintes estados: SemCarro, CarroCheg
 
 Uma demonstração da implementação e do funcionamento deste projeto pode ser observada no link abaixo:
 
-[Link do vídeo]
+https://youtu.be/i1-2RXinE0Q
+
