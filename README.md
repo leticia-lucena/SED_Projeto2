@@ -31,13 +31,13 @@ Representa o comportamento dos semáforos, contendo três estados: Vermelho, Ver
 
 A transição entre os estados, chamada de evento, é definida pelo tempo. Cada semáforo terá um tempo de espera do estado Vermelho para Verde diferente, que irá depender da distância que o carro leva para sair de um semáforo e chegar em outro. O tempo no estado Verde é de 15 segundos e de 5 segundos no estado Amarelo.
 
-Além disso, há o canal de comunicação síncrona entre eles, pelo qual o semáforo atual sinaliza para o seguinte que já está apto a mudar do estado Vermelho para o Verde.
+Além disso, há o canal de comunicação síncrona entre eles, pelo qual o semáforo atual sinaliza para o seguinte, que já está apto a mudar do estado Vermelho para o Verde.
 
 ## Autômato da Via
-Representa o comportanto da via, com os seguintes estados: SemCarro, CarroChegando, CarroEmMovimento, CarroNoSemaforo, CarroSaindo e ProximaVia, quando o carro entra na próxima via.
+Representa o comportamento da via, com os seguintes estados: SemCarro, CarroChegando, CarroEmMovimento, CarroNoSemaforo, CarroSaindo e ProximaVia, quando o carro entra na próxima via.
 
 # Demonstração 
 
-Uma demostração da implementação e do funcionamento deste projeto pode ser observada no link abaixo:
+Uma demonstração da implementação e do funcionamento deste projeto pode ser observada no link abaixo:
 
 [Link do vídeo]
